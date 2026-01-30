@@ -17,24 +17,31 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class MainActivity extends AppCompatActivity {
     //User Interface
-    private Button settingbutton, bevent1, bevent2, bevent3, showcount;
-    private TextView totalview;
-    private Button countview;
+    private Button settingbutton, bevent1, bevent2, bevent3;
+    private TextView totalcountview;
+    private Button showcount;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        //Initializing UI elements
+        settingbutton = findViewById(R.id.settingbutton);
+        bevent1 = findViewById(R.id.bevent1);
+        bevent2 = findViewById(R.id.bevent2);
+        bevent3 = findViewById(R.id.bevent3);
+        showcount = findViewById(R.id.showcount);
+
+
+
+
+    }
+
+
 
 
 
