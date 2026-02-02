@@ -6,21 +6,17 @@ package com.example.a40283531_ass1;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
     // UI
     private Button settingbutton, bevent1, bevent2, bevent3, showcount;
+    private Button resetButton;
     private TextView totalcountview;
 
     // Model
@@ -38,6 +34,21 @@ public class MainActivity extends AppCompatActivity {
         bevent3 = findViewById(R.id.bevent3);
         showcount = findViewById(R.id.showcount);
         totalcountview = findViewById(R.id.totalcountview);
+        resetButton = findViewById(R.id.resetButton);
+
+        resetButton.setOnClickListener(v -> {
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("Reset counts")
+                    .setMessage("Are you sure you want to reset all counts?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        counterModel.resetAll();
+                        refreshUI();
+                        Toast.makeText(this, "Counts reset", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
+
 
         // Init Model
         counterModel = new CounterPreferences(this);
@@ -67,9 +78,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // When coming back from SettingsActivity, update labels and count
         refreshUI();
-        // Optional: enforce rule again (if user backed out without saving)
         redirectIfNoNames();
     }
 
@@ -81,7 +90,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Increment event + total, and log chronologically
-        counterModel.incrementEvent(eventNum);
+        // IMPORTANT: this assumes incrementEvent returns boolean (true if success, false if max reached)
+        boolean success = counterModel.incrementEvent(eventNum);
+
+        if (!success) {
+            Toast.makeText(this, "Maximum count reached. Cannot add more.", Toast.LENGTH_SHORT).show();
+            return; // nothing changed, stay on main
+        }
 
         // Update screen
         refreshUI();
@@ -102,8 +117,7 @@ public class MainActivity extends AppCompatActivity {
     private void redirectIfNoNames() {
         if (!counterModel.hasAnyCounterNames()) {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-            // finish(); // optional: prevents going back to an unusable main screen
+            // finish(); // optional
         }
     }
 }
-
