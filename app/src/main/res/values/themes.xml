@@ -3,6 +3,11 @@
     <style name="Base.Theme._40283531_Ass1" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:statusBarColor">#E91E63</item>
+
+        <!-- If your status bar is light, use dark icons (battery/text) -->
+        <item name="android:windowLightStatusBar">true</item>
+
     </style>
 
     <style name="Theme._40283531_Ass1" parent="Base.Theme._40283531_Ass1" />
