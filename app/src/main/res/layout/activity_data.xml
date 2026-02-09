@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Counts row -->
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/dataToolbar"
         android:layout_width="match_parent"
@@ -64,7 +62,6 @@
             android:layout_marginTop="12dp" />
     </LinearLayout>
 
-    <!-- History title -->
     <TextView
         android:id="@+id/tvHistoryTitle"
         android:layout_width="wrap_content"
@@ -77,7 +74,6 @@
         app:layout_constraintTop_toBottomOf="@id/countRow"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Scrollable list -->
     <ListView
         android:id="@+id/lvHistory"
         android:layout_width="0dp"

@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
                     .show();
         });
 
-
-        // Init Model
         counterModel = new CounterPreferences(this);
 
         // SETTINGS -> SettingsActivity
@@ -90,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Increment event + total, and log chronologically
-        // IMPORTANT: this assumes incrementEvent returns boolean (true if success, false if max reached)
         boolean success = counterModel.incrementEvent(eventNum);
 
         if (!success) {

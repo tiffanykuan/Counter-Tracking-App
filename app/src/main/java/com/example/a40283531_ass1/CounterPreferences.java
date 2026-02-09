@@ -1,3 +1,7 @@
+//Tiffany Kuan
+//40283531
+//COEN 390 - Programming Assignment 1
+
 package com.example.a40283531_ass1;
 
 import android.content.Context;
@@ -9,18 +13,6 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * MVC Model (and persistence via SharedPreferences).
- * Stores:
- * - 3 event names
- * - 3 individual counts
- * - total count
- * - chronological event press log (stored as button numbers 1..3)
- *
- * Supports DataActivity modes:
- * - Event name mode (map 1..3 -> current names)
- * - Event Button # mode (show 1..3)
- */
 public class CounterPreferences {
 
     private static final String PREF_NAME = "AppSettings";
@@ -35,20 +27,14 @@ public class CounterPreferences {
     private static final String KEY_COUNTER2_COUNT = "counter2_count";
     private static final String KEY_COUNTER3_COUNT = "counter3_count";
 
-    // ✅ Your min/max rules
+    // minimum and maximim limit
     private static final int MIN_COUNT = 5;
     private static final int MAX_COUNT = 200;
 
     private static final String KEY_TOTAL_COUNT    = "total_count";
 
-    // ✅ NEW: store the user-chosen number of counters (5..200)
     private static final String KEY_COUNTER_LIMIT = "counter_limit";
 
-    /**
-     * Chronological history (JSON array stored as string).
-     * IMPORTANT: We store the BUTTON NUMBER (1..3), not the name.
-     * This lets DataActivity switch modes and also keeps history stable even if names change.
-     */
     private static final String KEY_EVENT_LOG_JSON = "event_log_json";
 
     private final SharedPreferences prefs;
@@ -57,9 +43,6 @@ public class CounterPreferences {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    // ----------------------------
-    // ✅ NEW: Counter Limit (5..200)
-    // ----------------------------
     public int getCounterLimit() {
         // Default to MIN_COUNT if never set
         int val = prefs.getInt(KEY_COUNTER_LIMIT, MIN_COUNT);
@@ -71,9 +54,6 @@ public class CounterPreferences {
         prefs.edit().putInt(KEY_COUNTER_LIMIT, clamped).apply();
     }
 
-    // ----------------------------
-    // Names (empty default means "not set yet")
-    // ----------------------------
     public String getCounter1Name() { return prefs.getString(KEY_COUNTER1_NAME, ""); }
     public String getCounter2Name() { return prefs.getString(KEY_COUNTER2_NAME, ""); }
     public String getCounter3Name() { return prefs.getString(KEY_COUNTER3_NAME, ""); }
@@ -98,36 +78,25 @@ public class CounterPreferences {
                 .apply();
     }
 
-    /** Returns true if at least one event name exists */
     public boolean hasAnyCounterNames() {
         return !getCounter1Name().isEmpty()
                 || !getCounter2Name().isEmpty()
                 || !getCounter3Name().isEmpty();
     }
 
-    // ----------------------------
-    // Counts
-    // ----------------------------
     public int getCount1() { return prefs.getInt(KEY_COUNTER1_COUNT, 0); }
     public int getCount2() { return prefs.getInt(KEY_COUNTER2_COUNT, 0); }
     public int getCount3() { return prefs.getInt(KEY_COUNTER3_COUNT, 0); }
 
-    // Backward-compatible getters (if other code calls these)
     public int getCounter1Count() { return getCount1(); }
     public int getCounter2Count() { return getCount2(); }
     public int getCounter3Count() { return getCount3(); }
-
     public int getTotalCount() { return prefs.getInt(KEY_TOTAL_COUNT, 0); }
 
-    /**
-     * Increments an individual counter (1..3) AND total count.
-     * Also logs the EVENT BUTTON NUMBER chronologically (oldest -> newest).
-     */
     public boolean incrementEvent(int eventNum) {
-        // Validate event number
+       //Validate an event number
         if (eventNum < 1 || eventNum > 3) return false;
 
-        // ✅ Enforce max on TOTAL using the user-chosen limit (5..200)
         if (getTotalCount() >= getCounterLimit()) {
             return false; // maximum reached
         }
@@ -152,14 +121,7 @@ public class CounterPreferences {
         return true;
     }
 
-    // ----------------------------
-    // Event history (chronological)
-    // ----------------------------
-
-    /**
-     * Returns event history as button numbers (1..3), oldest -> newest.
-     * This is what DataActivity should use.
-     */
+ //Event in chronological order
     public ArrayList<Integer> getEventHistory() {
         String json = prefs.getString(KEY_EVENT_LOG_JSON, "[]");
         ArrayList<Integer> result = new ArrayList<>();
@@ -167,7 +129,6 @@ public class CounterPreferences {
         try {
             JSONArray arr = new JSONArray(json);
             for (int i = 0; i < arr.length(); i++) {
-                // Accept either int or string (for safety / backward compatibility)
                 int val;
                 try {
                     val = arr.getInt(i);
@@ -179,16 +140,12 @@ public class CounterPreferences {
                 if (val >= 1 && val <= 3) result.add(val);
             }
         } catch (JSONException ignored) {
-            // If corrupted, return empty list
+
         }
 
         return result;
     }
 
-    /**
-     * Backward-compatible API (if old code expects List<String>).
-     * Returns the history mapped to CURRENT names (empty names will be skipped).
-     */
     public List<String> getEventLog() {
         ArrayList<Integer> nums = getEventHistory();
         List<String> out = new ArrayList<>();
@@ -201,9 +158,6 @@ public class CounterPreferences {
         return out;
     }
 
-    /**
-     * Converts an event number (1..3) to the current name (or "" if none).
-     */
     public String getNameForEvent(int eventNum) {
         switch (eventNum) {
             case 1: return safeTrim(getCounter1Name());
@@ -223,9 +177,6 @@ public class CounterPreferences {
                 .apply();
     }
 
-    // ----------------------------
-    // Helpers
-    // ----------------------------
     private static String safeTrim(String s) {
         return (s == null) ? "" : s.trim();
     }
@@ -236,9 +187,6 @@ public class CounterPreferences {
         return value;
     }
 
-    /**
-     * Adds eventNum (1..3) to the log using the SAME editor (atomic save).
-     */
     private void addEventNumberToLogInternal(SharedPreferences.Editor editor, int eventNum) {
         String json = prefs.getString(KEY_EVENT_LOG_JSON, "[]");
 
@@ -253,11 +201,6 @@ public class CounterPreferences {
         }
     }
 
-    /**
-     * Backward-compat: If your old log stored strings like "Event A" / names,
-     * there is no safe way to map those back to 1..3.
-     * But if it stored "1"/"2"/"3" as strings, we can recover.
-     */
     private int parseEventNumberFromString(String s) {
         if (s == null) return -1;
         s = s.trim();

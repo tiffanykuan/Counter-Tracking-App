@@ -7,12 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- SETTINGS -->
     <Button
         android:id="@+id/settingbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SETTINGS"
+        android:text="🪛SETTINGS🪛"
         android:backgroundTint="#F8BBD0"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +78,7 @@
         android:layout_marginTop="52dp"
         android:paddingHorizontal="16dp"
         android:paddingVertical="10dp"
-        android:text="SHOW MY COUNTS"
+        android:text="📊SHOW MY COUNTS 📊"
         android:backgroundTint="#08306B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -91,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="RESET"
+        android:text="🔄 RESET 🔄"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/showcount" />

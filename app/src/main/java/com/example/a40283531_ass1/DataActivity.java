@@ -19,11 +19,8 @@ public class DataActivity extends AppCompatActivity {
 
     private CounterPreferences prefs;
 
-    // true = Event name mode (default)
-    // false = Event Button # mode (1..3)
     private boolean showEventNames = true;
 
-    // History stored as button numbers: 1,2,3 (oldest -> newest)
     private ArrayList<Integer> history;
 
     @Override
@@ -47,8 +44,7 @@ public class DataActivity extends AppCompatActivity {
         tvTotal = findViewById(R.id.tvTotal);
         lvHistory = findViewById(R.id.lvHistory);
 
-        // Load history (oldest -> newest)
-        history = prefs.getEventHistory(); // implement this to return ArrayList<Integer>
+        history = prefs.getEventHistory();
 
         refreshUI();
     }
@@ -56,7 +52,7 @@ public class DataActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // In case user changed names in Settings, reload and refresh
+        // When user changed names in Settings, reload and refresh
         history = prefs.getEventHistory();
         refreshUI();
     }
@@ -68,7 +64,6 @@ public class DataActivity extends AppCompatActivity {
         int c3 = prefs.getCount3();
         int total = c1 + c2 + c3;
 
-        // labels depend on mode
         String label1 = showEventNames ? safeName(prefs.getCounter1Name(), "Event A") : "Counter 1";
         String label2 = showEventNames ? safeName(prefs.getCounter2Name(), "Event B") : "Counter 2";
         String label3 = showEventNames ? safeName(prefs.getCounter3Name(), "Event C") : "Counter 3";
@@ -78,7 +73,6 @@ public class DataActivity extends AppCompatActivity {
         tvEvent3Count.setText(label3 + ": " + c3 + " events");
         tvTotal.setText("Total: " + total);
 
-        // history list text
         ArrayList<String> historyText = new ArrayList<>();
         if (history != null) {
             for (int btnNum : history) {
@@ -120,7 +114,6 @@ public class DataActivity extends AppCompatActivity {
         return true;
     }
 
-    // Up nav + toggle action
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
