@@ -35,9 +35,14 @@ public class CounterPreferences {
     private static final String KEY_COUNTER2_COUNT = "counter2_count";
     private static final String KEY_COUNTER3_COUNT = "counter3_count";
 
+    // ✅ Your min/max rules
     private static final int MIN_COUNT = 5;
     private static final int MAX_COUNT = 200;
+
     private static final String KEY_TOTAL_COUNT    = "total_count";
+
+    // ✅ NEW: store the user-chosen number of counters (5..200)
+    private static final String KEY_COUNTER_LIMIT = "counter_limit";
 
     /**
      * Chronological history (JSON array stored as string).
@@ -50,6 +55,20 @@ public class CounterPreferences {
 
     public CounterPreferences(Context context) {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    // ----------------------------
+    // ✅ NEW: Counter Limit (5..200)
+    // ----------------------------
+    public int getCounterLimit() {
+        // Default to MIN_COUNT if never set
+        int val = prefs.getInt(KEY_COUNTER_LIMIT, MIN_COUNT);
+        return clamp(val, MIN_COUNT, MAX_COUNT);
+    }
+
+    public void setCounterLimit(int limit) {
+        int clamped = clamp(limit, MIN_COUNT, MAX_COUNT);
+        prefs.edit().putInt(KEY_COUNTER_LIMIT, clamped).apply();
     }
 
     // ----------------------------
@@ -108,8 +127,8 @@ public class CounterPreferences {
         // Validate event number
         if (eventNum < 1 || eventNum > 3) return false;
 
-        // Enforce max on TOTAL (change this if you want max per-counter instead)
-        if (getTotalCount() >= MAX_COUNT) {
+        // ✅ Enforce max on TOTAL using the user-chosen limit (5..200)
+        if (getTotalCount() >= getCounterLimit()) {
             return false; // maximum reached
         }
 
@@ -132,7 +151,6 @@ public class CounterPreferences {
         editor.apply();
         return true;
     }
-
 
     // ----------------------------
     // Event history (chronological)
@@ -210,6 +228,12 @@ public class CounterPreferences {
     // ----------------------------
     private static String safeTrim(String s) {
         return (s == null) ? "" : s.trim();
+    }
+
+    private static int clamp(int value, int min, int max) {
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
     }
 
     /**
