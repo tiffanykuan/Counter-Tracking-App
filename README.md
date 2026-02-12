@@ -36,5 +36,65 @@ This project demonstrates structured Android development, persistent storage, an
 ---
 
 ## 📂 Project Structure
+app/
+├── java/com/example/...
+│ ├── MainActivity.java
+│ ├── SettingsActivity.java
+│ ├── CounterPreferences.java
+│
+├── res/
+│ ├── layout/
+│ ├── values/
+│ ├── drawable/
+
+---
+
+
+---
+
+## 💾 Data Persistence
+
+The application stores the following using SharedPreferences:
+
+- Event names  
+- Individual counter values  
+- Total count  
+- Counter limit  
+- Event press history (stored as JSON)
+
+All data persists even after the application is closed.
+
+---
+
+## ▶️ How to Run
+
+1. Clone the repository:
+
+git clone https://github.com/yourusername/your-repo-name.git
+
+
+2. Open the project in Android Studio  
+3. Sync Gradle  
+4. Run on an emulator or physical Android device  
+
+---
+
+## 🎯 Concepts Demonstrated
+
+- Android Activity lifecycle management  
+- UI design using XML  
+- Persistent data storage  
+- Object-oriented programming  
+- Separation of concerns  
+- Basic MVC structure  
+
+---
+
+## 👩🏻‍💻 Author
+
+**Tiffany Kuan**  
+Computer Engineering Student  
+Concordia University
+
 
 
