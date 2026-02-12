@@ -17,7 +17,7 @@ View event history
 Reset counters (with confirmation)
 
 The app follows an MVC-style structure and emphasizes clean separation between UI logic and data persistence.
-
+--------------------------------------------------------------------------------------------------------------
 🚀 Features
 🔢 Counter Management
 
